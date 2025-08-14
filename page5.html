@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Final Birthday Wish</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap');
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: black;
+    color: white;
+  }
+  canvas { display: block; position: fixed; top: 0; left: 0; z-index: 0; }
+
+  .message-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+  }
+
+  .main-message {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    color: #ffeb3b;
+    text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,215,0,0.8);
+    animation: float 3s ease-in-out infinite alternate,
+               shimmer 2s linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -52%) scale(1.05); }
+  }
+
+  @keyframes shimmer {
+    0% { text-shadow: 0 0 10px #fff, 0 0 20px #ffeb3b; }
+    50% { text-shadow: 0 0 20px #fff, 0 0 40px #ffeb3b, 0 0 60px #ffeb3b; }
+    100% { text-shadow: 0 0 10px #fff, 0 0 20px #ffeb3b; }
+  }
+
+  .sub-message {
+    font-size: 1.3rem;
+    color: #ffe57f;
+    margin-top: 15px;
+    animation: fadeIn 2s ease forwards 1s;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* Navigation Buttons */
+  .nav-buttons {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 3;
+  }
+  .nav-buttons a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background: rgba(255, 235, 59, 0.1);
+    border: 2px solid #ffeb3b;
+    border-radius: 30px;
+    color: #ffeb3b;
+    font-weight: 600;
+    transition: 0.3s;
+    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
+  }
+  .nav-buttons a:hover {
+    background: #ffeb3b;
+    color: black;
+    box-shadow: 0 0 20px #ffeb3b, 0 0 40px #ffeb3b;
+  }
+
+  /* Music Control Button */
+  .music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 235, 59, 0.2);
+    border: 2px solid #ffeb3b;
+    color: #ffeb3b;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 10px #ffeb3b;
+    transition: all 0.3s ease;
+  }
+  .music-control:hover {
+    background: rgba(255, 235, 59, 0.3);
+    box-shadow: 0 0 20px #ffeb3b;
+  }
+</style>
+</head>
+<body>
+<canvas></canvas>
+
+<!-- Audio Element -->
+<audio id="bgMusic" loop>
+  <source src="wishing.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<div class="message-container">
+  <div class="main-message">At last</div>
+  <div class="main-message">Happy Birthday My favourite one 🎉💖</div>
+  <div class="sub-message">Wishing you endless happiness, love, and success 💕</div>
+</div>
+
+<!-- Music Control Button -->
+<button id="musicToggle" class="music-control">🔊</button>
+
+<!-- Navigation Buttons -->
+<div class="nav-buttons">
+  <a href="index.html">Index</a>
+  <a href="page2.html">Page 2</a>
+  <a href="page3.html">Page 3</a>
+  <a href="page4.html">Page 4</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script>
+  // THREE.js Background
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  let renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let starsGeometry = new THREE.BufferGeometry();
+  let starCount = 2000;
+  let starPositions = [];
+  for (let i = 0; i < starCount; i++) {
+    let x = (Math.random() - 0.5) * 2000;
+    let y = (Math.random() - 0.5) * 2000;
+    let z = (Math.random() - 0.5) * 2000;
+    starPositions.push(x, y, z);
+  }
+  starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+
+  let starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
+  let stars = new THREE.Points(starsGeometry, starsMaterial);
+  scene.add(stars);
+
+  camera.position.z = 500;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    stars.rotation.x += 0.0005;
+    stars.rotation.y += 0.001;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Music Control
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  let isMusicPlaying = false;
+
+  // Try to autoplay music when page loads
+  function tryPlayMusic() {
+    const playPromise = bgMusic.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        isMusicPlaying = true;
+        musicToggle.textContent = '🔊';
+      })
+      .catch(error => {
+        isMusicPlaying = false;
+        musicToggle.textContent = '🔇';
+        console.log('Autoplay prevented:', error);
+      });
+    }
+  }
+
+  // Toggle music play/pause
+  function toggleMusic() {
+    if (isMusicPlaying) {
+      bgMusic.pause();
+      musicToggle.textContent = '🔇';
+    } else {
+      bgMusic.play();
+      musicToggle.textContent = '🔊';
+    }
+    isMusicPlaying = !isMusicPlaying;
+  }
+
+  // Event listeners
+  musicToggle.addEventListener('click', toggleMusic);
+  window.addEventListener('load', tryPlayMusic);
+
+  // Stop music when leaving page
+  window.addEventListener('beforeunload', () => {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  });
+
+  // Handle page navigation
+  document.querySelectorAll('.nav-buttons a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+      window.location.href = e.target.href;
+    });
+  });
+</script>
+</body>
+</html>
