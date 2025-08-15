@@ -106,17 +106,17 @@
 </div>
 
 <script>
-  const message = `Dear my favorite one❤️,
+  const message = `Dear my favourite one❤️,
 
-MY life there is no words in this universe to define you , but still i try to explain the smallest part with this existing words.Your smile makes my world brighter. The way your eyes speak when words fail, and your voice feels like home. You understand my silence. You make even the ordinary feel special.You are the one and only friend greater then a friend(like a family),i want to see my future only with ur happiness. Your laughter is my favorite melody. You never judge me, even at my worst. You complete my incomplete thoughts. You love me in ways I never knew I needed. Your presence turns my bad days good. The way you hold my hand(once that i will never forget❤️) makes me feel that i can't explain. You remember the little things about me. You know my fears yet never make me feel weak. Your love feels effortless, yet so deep. The way you listen, even when I ramble. Your heart is as beautiful as your face. You bring out the best in me. Your patience with me, even when I'm difficult. The way you wipe away my tears. You never let me feel alone. Your love makes me believe in forever. You make me feel important without trying. Your kindness makes the world better. The way you say my name sounds different. You are my peace in this chaotic world. The way you trust me without conditions`;
+My life there is no words in this universe to define you , but still i try to explain the smallest part with this existing words.Your smile makes my world brighter. The way your eyes speak when words fail, and your voice feels like home. You understand my silence. You make even the ordinary feel special.You are the one and only friend greater then a friend(like a family),i want to see my future only with ur happiness. Your laughter is my favorite melody. You never judge me, even at my worst. You complete my incomplete thoughts. You love me in ways I never knew I needed. Your presence turns my bad days good. The way you hold my hand(once that i will never forget❤️) makes me feel that i can't explain. You remember the little things about me. You know my fears yet never make me feel weak. Your love feels effortless, yet so deep. The way you listen, even when I ramble. Your heart is as beautiful as your face. You bring out the best in me. Your patience with me, even when I'm difficult. The way you wipe away my tears. You never let me feel alone. Your love makes me believe in forever. You make me feel important without trying. Your kindness makes the world better. The way you say my name sounds different. You are my peace in this chaotic world. The way you trust me without conditions`;
 
   const typingElement = document.getElementById('typing');
   const navButtons = document.getElementById('nav-buttons');
   let charIndex = 0;
 
-  // Set total display time (2–3 minutes range)
-  const targetTime = 1 * 60 * 1000;
-  const perCharDelay = targetTime / message.length;
+  // Reduced total display time to 30 seconds (faster typing)
+  // const targetTime = 30 * 1000; // Changed from 2-3 minutes to 30 seconds
+  const perCharDelay = 1.5;
 
   function startTyping(){
     if (charIndex < message.length) {
