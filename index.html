@@ -35,7 +35,10 @@
   }
   @keyframes blinkCursor{50%{border-color:transparent}}
   .typewriter[data-blink="1"]{animation:blinkCursor .7s step-end infinite}
-  .buttons{display:flex;gap:14px;margin-top:10px; pointer-events:auto}
+  .buttons-below{
+    position:fixed;left:50%;top:75%;transform:translateX(-50%);z-index:3;
+    display:flex;gap:14px;pointer-events:auto;
+  }
   .btn{
     background:linear-gradient(90deg,var(--accent1),var(--accent2));
     color:#041022;padding:12px 18px;border-radius:999px;border:0;font-weight:700;
@@ -46,7 +49,7 @@
   .submsg{font-size:14px;color:rgba(255,255,255,0.78);margin-top:6px;max-width:70vw}
   @media (max-width:520px){
     .typewriter{font-size:22px}
-    .buttons{flex-direction:column}
+    .buttons-below{flex-direction:column}
     .btn{width:200px}
   }
 
@@ -204,14 +207,10 @@
   <div style="font-size: 0.7em; margin-top: 20px;">May your day be as beautiful as you are!</div>
 </div>
 
-<!-- UI -->
-<div class="ui">
-  <!-- <div id="typewriter" class="typewriter" data-blink="1" aria-live="polite"></div> -->
-  <!-- <div class="submsg">Wishing you all the happiness in the world — press the buttons below to continue the surprise.</div> -->
-  <div class="buttons">
-    <button id="shayariBtn" class="btn">Fun here</button>
-    <button id="memoriesBtn" class="btn">📸Memories</button>
-  </div>
+<!-- Buttons positioned below the message -->
+<div class="buttons-below">
+  <button id="shayariBtn" class="btn">Fun here</button>
+  <button id="memoriesBtn" class="btn">📸Memories</button>
 </div>
 
 <!-- Music control button -->
@@ -499,7 +498,7 @@ const tickSound = document.getElementById('tickSound');
 const popSfx = document.getElementById('pop');
 const cheerSfx = document.getElementById('cheer');
 const birthdayMessage = document.getElementById('birthdayMessage');
-const buttons = document.querySelector('.buttons');
+const buttonsBelow = document.querySelector('.buttons-below');
 
 let countdownInterval;
 let celebrationStarted = false;
@@ -565,7 +564,7 @@ function celebrateBirthday() {
   birthdayMessage.classList.add('show');
   
   // Make buttons visible
-  buttons.style.pointerEvents = 'auto';
+  buttonsBelow.style.pointerEvents = 'auto';
   
   // Start celebration effects
   createConfetti();
