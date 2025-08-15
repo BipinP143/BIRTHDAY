@@ -38,7 +38,8 @@
   .typewriter[data-blink="1"]{animation:blinkCursor .7s step-end infinite}
   .buttons-below{
     position:fixed;left:50%;top:75%;transform:translateX(-50%);z-index:3;
-    display:flex;gap:14px;
+    display:none; /* Changed from flex to none */
+    gap:14px;
     pointer-events:none;
     opacity:0;
     transition:opacity 1s ease;
@@ -227,9 +228,6 @@
 <audio id="tickSound" preload="auto">
   <source src="tick.mp3" type="audio/mpeg"/>
 </audio>
-<!-- <audio id="pop" preload="auto">
-  <source src="pop.mp3" type="audio/mpeg"/>
-</audio> -->
 <audio id="cheer" preload="auto">
   <source src="cheer.mp3" type="audio/mpeg"/>
 </audio>
@@ -494,7 +492,6 @@ const clockOverlay = document.getElementById('clock');
 const clockTime = document.getElementById('clockTime');
 const clockSub = document.querySelector('.clock-sub');
 const tickSound = document.getElementById('tickSound');
-const popSfx = document.getElementById('pop');
 const cheerSfx = document.getElementById('cheer');
 const birthdayMessage = document.getElementById('birthdayMessage');
 const buttonsBelow = document.querySelector('.buttons-below');
@@ -573,27 +570,25 @@ function celebrateBirthday() {
   
   // Play sound effects
   try{ 
-    popSfx.currentTime = 0; 
-    popSfx.play(); 
+    cheerSfx.currentTime = 0;
+    cheerSfx.play();
     setTimeout(() => {
-      cheerSfx.currentTime = 0;
-      cheerSfx.play();
-      // Stop cheer sound after 3 seconds
-      setTimeout(() => {
-        try {
-          cheerSfx.pause();
-          cheerSfx.currentTime = 0;
-        } catch(e) {}
-      }, 3000);
-    }, 1000);
+      try {
+        cheerSfx.pause();
+        cheerSfx.currentTime = 0;
+      } catch(e) {}
+    }, 3000);
   } catch(e){}
   
   sparkleBurstAround(birthdayMessage, 26);
   
-  // Show buttons after 3 seconds
+  // Show buttons after 3 seconds - UPDATED CODE
   setTimeout(() => {
-    buttonsBelow.style.opacity = '1';
-    buttonsBelow.style.pointerEvents = 'auto'; // Enable interaction
+    buttonsBelow.style.display = 'flex';
+    setTimeout(() => {
+      buttonsBelow.style.opacity = '1';
+      buttonsBelow.style.pointerEvents = 'auto';
+    }, 10);
   }, 3000);
   
   // Keep creating effects periodically
@@ -617,8 +612,6 @@ updateClock(); // Initialize immediately
 
 /* ---------- Music autoplay with fallback overlay ---------- */
 const bgm = document.getElementById('bgm');
-const musicOverlay = document.getElementById('musicOverlay');
-const tapToPlay = document.getElementById('tapToPlay');
 const musicControl = document.getElementById('musicControl');
 let isMusicPlaying = false;
 
@@ -628,10 +621,7 @@ function tryPlayMusic(){
     p.then(() => {
       isMusicPlaying = true;
       musicControl.textContent = '🔊';
-      musicOverlay.style.display='none';
-    }).catch(()=> { 
-      musicOverlay.style.display='flex'; 
-    });
+    }).catch(()=> {});
   }
 }
 
@@ -642,8 +632,6 @@ function toggleMusic() {
   } else {
     bgm.play().then(() => {
       musicControl.textContent = '🔊';
-    }).catch(() => {
-      musicOverlay.style.display = 'flex';
     });
   }
   isMusicPlaying = !isMusicPlaying;
@@ -653,7 +641,7 @@ musicControl.addEventListener('click', toggleMusic);
 
 /* ---------- Stop audio/loops when leaving page ---------- */
 function stopAllAudio(){
-  [bgm, tickSound, popSfx, cheerSfx].forEach(a=>{
+  [bgm, tickSound, cheerSfx].forEach(a=>{
     try{ a.pause(); a.currentTime = 0; }catch(e){}
   });
 }
