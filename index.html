@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Happy Birthday — Madamji</title>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,"> <!-- Empty favicon to prevent 404 -->
 <style>
   :root{
     --accent1:#ff4d6d;
@@ -37,7 +38,10 @@
   .typewriter[data-blink="1"]{animation:blinkCursor .7s step-end infinite}
   .buttons-below{
     position:fixed;left:50%;top:75%;transform:translateX(-50%);z-index:3;
-    display:flex;gap:14px;pointer-events:auto;
+    display:flex;gap:14px;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 1s ease;
   }
   .btn{
     background:linear-gradient(90deg,var(--accent1),var(--accent2));
@@ -53,7 +57,7 @@
     .btn{width:200px}
   }
 
-  /* ---------- Clock Overlay ---------- */
+  /* Clock Overlay */
   .clock-overlay{
     position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
     z-index:3; background: radial-gradient(1000px 1000px at 50% 50%, rgba(20,0,30,.35), rgba(0,0,0,.85));
@@ -209,8 +213,8 @@
 
 <!-- Buttons positioned below the message -->
 <div class="buttons-below">
-  <button id="shayariBtn" class="btn">Fun here</button>
-  <button id="memoriesBtn" class="btn">📸Memories</button>
+  <button onclick="window.location.href='page2.html'" class="btn">Fun here</button>
+  <button onclick="window.location.href='page3.html'" class="btn">📸Memories</button>
 </div>
 
 <!-- Music control button -->
@@ -223,17 +227,12 @@
 <audio id="tickSound" preload="auto">
   <source src="tick.mp3" type="audio/mpeg"/>
 </audio>
-<audio id="pop" preload="auto">
+<!-- <audio id="pop" preload="auto">
   <source src="pop.mp3" type="audio/mpeg"/>
-</audio>
+</audio> -->
 <audio id="cheer" preload="auto">
   <source src="cheer.mp3" type="audio/mpeg"/>
 </audio>
-
-<!-- Music fallback overlay -->
-<div id="musicOverlay" class="music-overlay">
-  <button class="playbtn" id="tapToPlay">Tap to Play Music 🎵</button>
-</div>
 
 <script>
 /* ---------- Canvas setup & HiDPI scaling ---------- */
@@ -563,9 +562,6 @@ function celebrateBirthday() {
   // Show birthday message
   birthdayMessage.classList.add('show');
   
-  // Make buttons visible
-  buttonsBelow.style.pointerEvents = 'auto';
-  
   // Start celebration effects
   createConfetti();
   createBalloons();
@@ -593,6 +589,12 @@ function celebrateBirthday() {
   } catch(e){}
   
   sparkleBurstAround(birthdayMessage, 26);
+  
+  // Show buttons after 3 seconds
+  setTimeout(() => {
+    buttonsBelow.style.opacity = '1';
+    buttonsBelow.style.pointerEvents = 'auto'; // Enable interaction
+  }, 3000);
   
   // Keep creating effects periodically
   setInterval(() => {
@@ -648,30 +650,6 @@ function toggleMusic() {
 }
 
 musicControl.addEventListener('click', toggleMusic);
-tapToPlay.addEventListener('click', ()=> {
-  bgm.play().then(() => {
-    musicOverlay.style.display='none';
-    isMusicPlaying = true;
-    musicControl.textContent = '🔊';
-  }).catch(()=>{});
-}, {passive:true});
-
-/* ---------- Navigation Buttons ---------- */
-const shayariBtn = document.getElementById('shayariBtn');
-const memoriesBtn = document.getElementById('memoriesBtn');
-
-shayariBtn.addEventListener('click', () => {
-  window.location.href = 'page2.html';
-});
-
-memoriesBtn.addEventListener('click', () => {
-  window.location.href = 'page3.html';
-});
-
-window.addEventListener('load', ()=>{
-  tryPlayMusic();
-  updateClock(); // Initialize clock immediately
-});
 
 /* ---------- Stop audio/loops when leaving page ---------- */
 function stopAllAudio(){
@@ -681,13 +659,24 @@ function stopAllAudio(){
 }
 window.addEventListener('pagehide', stopAllAudio, {capture:true});
 window.addEventListener('beforeunload', stopAllAudio);
-window.addEventListener('unload', stopAllAudio);
 
 /* ---------- Safety: keep arrays bounded ---------- */
 setInterval(()=>{
   if (hearts.length > MAX_HEARTS) hearts.splice(0, hearts.length - MAX_HEARTS);
   if (sparks.length > MAX_SPARKS) sparks.splice(0, sparks.length - MAX_SPARKS);
 }, 1000);
+
+// Initialize audio error handling
+document.querySelectorAll('audio').forEach(audio => {
+  audio.addEventListener('error', (e) => {
+    console.log('Audio error:', audio.id, e);
+  });
+});
+
+window.addEventListener('load', ()=>{
+  tryPlayMusic();
+  updateClock(); // Initialize clock immediately
+});
 </script>
 </body>
 </html>
