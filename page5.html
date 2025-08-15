@@ -105,6 +105,42 @@
     background: rgba(255, 235, 59, 0.3);
     box-shadow: 0 0 20px #ffeb3b;
   }
+
+  /* The End Message */
+  .the-end {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s ease;
+  }
+
+  .the-end.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .the-end-message {
+    font-family: 'Great Vibes', cursive;
+    font-size: 8rem;
+    color: #ff5252;
+    text-shadow: 0 0 20px rgba(255, 82, 82, 0.8), 0 0 40px rgba(255, 0, 0, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
 </style>
 </head>
 <body>
@@ -118,8 +154,14 @@
 
 <div class="message-container">
   <div class="main-message">At last</div>
+  <br>
   <div class="main-message">Happy Birthday My favourite one 🎉💖</div>
-  <div class="sub-message">Wishing you endless happiness, love, and success 💕</div>
+  <div class="sub-message">Wishing you endless happiness, love, and success 💕<br>I am always with you</div>
+</div>
+
+<!-- The End Message -->
+<div class="the-end" id="theEnd">
+  <div class="the-end-message">THE END</div>
 </div>
 
 <!-- Music Control Button -->
@@ -176,7 +218,16 @@
   // Music Control
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
+  const theEnd = document.getElementById('theEnd');
   let isMusicPlaying = false;
+
+  // Remove loop and add ended event listener
+  bgMusic.loop = false;
+  bgMusic.addEventListener('ended', () => {
+    theEnd.classList.add('show');
+    isMusicPlaying = false;
+    musicToggle.textContent = '🔇';
+  });
 
   // Try to autoplay music when page loads
   function tryPlayMusic() {
